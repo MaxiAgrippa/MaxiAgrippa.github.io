@@ -70,6 +70,74 @@
                     text-align: center;
                     }
             }
+            @keyframes reverse_rainbow {
+                100% {
+                    background-color: black;
+                    color: white;
+                    font-size: 150px;
+                    text-align: center;
+                    }
+                    90% {
+                    background-color: red;
+                    color: orange;
+                    font-size: 140px;
+                    text-align: left;
+                    }
+                    80% {
+                    background-color: orange;
+                    color: yellow;
+                    font-size: 130px;
+                    text-align: center;
+                    }
+                    70% {
+                    background-color: yellow;
+                    color: green;
+                    font-size: 120px;
+                    text-align: right;
+                    }
+                    60% {
+                    background-color: green;
+                    color: blue;
+                    font-size: 110px;
+                    text-align: center;
+                    }
+                    50% {
+                    background-color: blue;
+                    color: aqua;
+                    font-size: 100px;
+                    text-align: right;
+                    }
+                    40% {
+                    background-color: aqua;
+                    color: purple;
+                    font-size: 110px;
+                    text-align: center;
+                    }
+                    30% {
+                    background-color: purple;
+                    color: black;
+                    font-size: 120px;
+                    text-align: left;
+                    }
+                    20% {
+                    background-color: black;
+                    color: gray;
+                    font-size: 130px;
+                    text-align: center;
+                    }
+                    10% {
+                    background-color: gray;
+                    color: black;
+                    font-size: 140px;
+                    text-align: right;
+                    }
+                    0% {
+                    background-color: black;
+                    color: white;
+                    font-size: 150px;
+                    text-align: center;
+                    }
+            }
             h1 {
                 background-color: powderblue;
                 color: aqua;
@@ -78,9 +146,18 @@
                 animation-duration: 3s;
                 animation-iteration-count: infinite;
                 }
+            h2 {
+                background-color: powderblue;
+                color: aqua;
+                position: center;
+                animation-name: reverse_rainbow;
+                animation-duration: 3s;
+                animation-iteration-count: infinite;
+                }
         </style>
     </head>
     <body>
         <h1>What a test!</h1>
+        <h2>What a test!</h2>
     </body>
 </html>
