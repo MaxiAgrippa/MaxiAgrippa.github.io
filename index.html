@@ -2,6 +2,12 @@
 <html>
     <head>
         <style>
+            @keyframes text_shadow {
+                10% {text-shadow: 5px 5px rgb(191, 52, 255);}
+                20% {text-shadow: -5px 5px rgb(57, 192, 255);}
+                25% {text-shadow: 5px -5px rgb(247, 164, 56);}
+                30% {text-shadow: -5px -5px rgb(141, 255, 75);}
+            }
             @keyframes rainbow {
                 0% {
                     background-color: black;
@@ -142,17 +148,17 @@
                 background-color: powderblue;
                 color: aqua;
                 position: center;
-                animation-name: rainbow;
-                animation-duration: 3s;
-                animation-iteration-count: infinite;
+                text-align: center;
+                font-family: fantasy;
+                animation: rainbow 3s infinite, text_shadow 2.5s infinite;
                 }
             h2 {
                 background-color: powderblue;
                 color: aqua;
                 position: center;
-                animation-name: reverse_rainbow;
-                animation-duration: 3s;
-                animation-iteration-count: infinite;
+                text-align: center;
+                font-family: fantasy;
+                animation: reverse_rainbow 3s infinite, text_shadow 2.5s infinite;
                 }
         </style>
     </head>
