@@ -24,6 +24,7 @@
             width: 785px;
             height: 1000px;
             transform: translate(-50%, 0%);
+            filter: blur(2px) contrast(1);
         }
 
         @keyframes text_shadow {
@@ -332,10 +333,29 @@
             const ctx = canvas.getContext('2d'); //context
 
             // set the canvas width(need to match the width in css)
-            canvas.width = 1570;
+            canvas.width = 785;
             // set the canvas height(need to match the height in css)
-            canvas.height = 2000;
+            canvas.height = 1000;
             // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
+
+            // Letters to take as a particle inside the canvas
+            const letters = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M'];
+
+            // control is there a wave of particles(1 is yes, -1 is no)
+            let switcher = 1;
+            // counter for time
+            let counter = 0;
+            // set the switcher every 6 second.
+            // every 500 ms, call the inline function.
+            setInterval(function () {
+                // every 500 ms, counter + 1
+                counter++;
+                // when counter % 12 = 0, every 6 sec. 12 * 500ms = 6 sec
+                if (counter % 12 === 0) {
+                    // switch switcher. 
+                    switcher *= -1;
+                }
+            }, 500);
 
             // draw the image(image1) to canvas
             ctx.drawImage(image1, 0, 0, canvas.width, canvas.height);
@@ -433,6 +453,8 @@
                     this.position1 = Math.floor(this.y);
                     // the x position of the particle(index of the mappedImage array has to be integer, aka pixle has to be integer)
                     this.position2 = Math.floor(this.x);
+                    // the letter we choose to perform as a particle
+                    this.letter = letters[Math.floor(Math.random() * letters.length)];
                 }
 
                 // update the particle location and speed information
@@ -441,10 +463,31 @@
                     this.position1 = Math.floor(this.y);
                     // update the pixel position of according to the new x value
                     this.position2 = Math.floor(this.x);
+                    // if the current location of the particle inside the canvas(aks, the position index within the mappedImage).
+                    if ((mappedImage[this.position1]) && (mappedImage[this.position1][this.position2])) {
+                        // change the speed of the particle according to the brightness of the cell. 
+                        this.speed = mappedImage[this.position1][this.position2][0];
+                    }
+                    // change the size of the particle according to the speed.
+                    this.size = this.speed * 3;
                     // change the speed of the particle according to the brightness of the cell. 
                     this.speed = mappedImage[this.position1][this.position2][0];
                     // calculated the movement(real speed of the particle), adding the changed speed with velocity.
                     let movement = (4.5 - this.speed) + this.velocity;
+
+                    // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation#types
+                    // The globalCompositeOperation property sets or returns how a source (new) image are drawn onto a destination (existing) image.
+                    ctx.globalCompositeOperation = 'soft-light';
+                    // check switcher to change effects. 
+                    if (switcher === 1) {
+                        ctx.globalCompositeOperation = 'soft-light';
+                    } else {
+                        ctx.globalCompositeOperation = 'difference';
+                    }
+                    if (counter % 12 === 0) {
+                        this.x = Math.random() * canvas.width;
+                        this.y = Math.random() * canvas.height;
+                    }
 
                     // update the y value of the particle
                     this.y += movement;
@@ -460,12 +503,26 @@
                     // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/beginPath
                     // The beginPath() method begins a path, or resets the current path.
                     ctx.beginPath();
-                    // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
-                    // The fillStyle property sets or returns the color, gradient, or pattern used to fill the drawing.
-                    ctx.fillStyle = 'white';
-                    // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/arc
-                    // The arc() method creates an arc/curve (used to create circles, or parts of circles).
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+
+                    // if the current location of the particle inside the canvas(aks, the position index within the mappedImage).
+                    if ((mappedImage[this.position1]) && (mappedImage[this.position1][this.position2])) {
+                        // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
+                        // The fillStyle property sets or returns the color, gradient, or pattern used to fill the drawing.
+                        // set to the pixel color.
+                        ctx.fillStyle = mappedImage[this.position1][this.position2][1];
+
+                        // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle
+                        // The strokeStyle property sets or returns the color, gradient, or pattern used for strokes.
+                        ctx.strokeStyle = mappedImage[this.position1][this.position2][1];
+                    }
+
+                    // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font
+                    // The font property sets or returns the current font properties for text content on the canvas.
+                    ctx.font = '40px Consolas';
+                    // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillText
+                    // The fillText() method draws filled text on the canvas. The default color of the text is black.
+                    ctx.fillText(this.letter, this.x, this.y);
+
                     // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fill
                     // The fill() method fills the current drawing (path). The default color is black.
                     ctx.fill();
